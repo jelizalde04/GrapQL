@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta GraphQL: Países</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        h1 { color: #333; }
+    </style>
+</head>
+<body>
+    <h1>Consulta GraphQL: Información sobre Países</h1>
+    
+    <!-- Formulario para hacer la consulta -->
+    <form id="graphqlForm">
+        <textarea id="graphqlQuery" rows="5" cols="50">
+{
+    countries {
+        name
+        code
+    }
+}
+        </textarea><br><br>
+        <button type="submit">Consultar Países</button>
+    </form>
+    
+    <h2>Respuesta:</h2>
+    <pre id="response"></pre>
+
+    <script>
+        document.getElementById('graphqlForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Obtener la consulta que el usuario ingresa
+            const query = document.getElementById('graphqlQuery').value;
+
+            // Endpoint de un servidor público de GraphQL
+            const endpoint = 'https://countries.trevorblades.com/graphql'; // Este es un servidor real
+
+            // Hacer la consulta a GraphQL
+            fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ query: query }), // Enviar la consulta
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Mostrar la respuesta en el navegador
+                document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                // Mostrar error si algo falla
+                document.getElementById('response').textContent = 'Error: ' + error;
+            });
+        });
+    </script>
+</body>
+</html>
